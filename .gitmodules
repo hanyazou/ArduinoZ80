@@ -1,0 +1,9 @@
+[submodule "Z80"]
+	path = Z80
+	url = https://github.com/redcode/Z80.git
+[submodule "Zeta"]
+	path = Zeta
+	url = https://github.com/redcode/Zeta.git
+[submodule "asl-releases"]
+	path = asl-releases
+	url = https://github.com/Macroassembler-AS/asl-releases.git
