@@ -1,6 +1,8 @@
-#include "src/z80emu.h"
+#include "src/machine.h"
 
 Machine machine;
+extern unsigned char rom_bin[];
+extern unsigned int rom_bin_len;
 
 extern "C" {
    int _write ( int fd, char *ptr, int len ) {
@@ -18,7 +20,7 @@ void setup() {
 
   machine_initialize(&machine);
   machine_power(&machine, Z_TRUE);
-  memcpy(machine.memory, hello_bin, hello_bin_len);
+  memcpy(machine.memory, rom_bin, rom_bin_len);
 }
 
 void loop() {

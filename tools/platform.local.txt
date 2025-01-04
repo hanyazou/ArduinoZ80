@@ -1,0 +1,16 @@
+#
+# Place this platform.local.txt in the same directory as platform.txt, located in the hardware
+# folder of your Arduino core. For custom cores installed via the Board Manager, it's typically
+# under ~/Library/Arduino15/packages/<package_name>/hardware/<architecture>/<version>/
+#
+
+#
+# Add include paths for the Z80 CPU Emulator and Zeta
+#
+compiler.c.extra_flags=-DZ80_STATIC -DZ80_WITH_EXECUTE -DZ80_WITH_LOCAL_HEADER -I{build.source.path}/Zeta/API -I{build.source.path}/Z80/API
+compiler.cpp.extra_flags=-DZ80_STATIC -DZ80_WITH_EXECUTE -DZ80_WITH_LOCAL_HEADER -I{build.source.path}/Zeta/API -I{build.source.path}/Z80/API
+
+#
+# Tweak the .S to .o pattern to support both Z80 assembler source files and ARM assembler source files.
+#
+recipe.S.o.pattern="{build.source.path}/tools/as" "{build.compiler_path}/{build.crossprefix}" "{source_file}" "{object_file}" -- "{compiler.path}{compiler.S.cmd}" {compiler.S.flags} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} -DARDUINO_ARCH_RENESAS -DARDUINO_FSP -D_XOPEN_SOURCE=700 {includes} {build.extra_flags} {build.extra_ldflags} {compiler.S.extra_flags} "-I{build.core.path}/api/deprecated" "-I{build.core.path}/api/deprecated-avr-comp" {includes} "-iprefix{runtime.platform.path}" "@{compiler.fsp.includes}" "{source_file}" -o "{object_file}"

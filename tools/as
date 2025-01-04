@@ -1,0 +1,31 @@
+#!/bin/bash -e
+
+script_dir=$(dirname ${BASH_SOURCE[0]:-$0})
+asl_dir=$script_dir/../asl-releases
+
+crossprefix=$1
+src=$2
+obj=$3
+opts=-mfloat-abi=hard
+
+shift 4
+
+if [ $(basename $(dirname $obj)) == sketch ]; then
+    src=$(echo $(head -1 $src) | awk '{print $3}')
+    cd $(dirname $obj)
+    rom=$(basename $obj)
+    rom=${rom%.*}
+    rom=${rom%.*}
+    rm -f ${rom}.c.o
+    $asl_dir/asl $src -o ${rom}.p
+    $asl_dir/p2bin ${rom}.p ${rom}.bin
+    xxd -i ${rom}.bin > ${rom}.inc
+    echo "#include \"${rom}.inc\"" > ${rom}.c
+    ${crossprefix}gcc ${opts} -c ${rom}.c
+    mv ${rom}.o $obj
+    rm -f ${rom}.p ${rom}.bin ${rom}.c ${rom}.inc
+    ls -lt ${rom}.*
+else
+    echo $*
+    $*
+fi
