@@ -30,8 +30,8 @@ $(SRCS): $(INCS)
 trial: $(SRCS) hello.h
 	CC $(DEFS) $(OPTS) -o trial $(SRCS) 
 
-hello.bin: hello.z80
-	$(Z80AS) hello.z80
+hello.bin: hello.S
+	$(Z80AS) hello.S
 	$(Z80LD) hello
 
 hello.h: hello.bin
